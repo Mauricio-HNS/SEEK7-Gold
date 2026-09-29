@@ -3,6 +3,10 @@ import '../screens/splash_screen.dart';
 import '../screens/onboarding_screen.dart';
 import '../screens/auth_screen.dart';
 import '../screens/home_screen.dart';
+import '../screens/forgot_password_screen.dart';
+import '../screens/wallet_screen.dart';
+import '../screens/run_screen.dart';
+import '../screens/merchant_dashboard_screen.dart';
 
 class Seek7App extends StatelessWidget {
   const Seek7App({super.key});
@@ -26,7 +30,11 @@ class Seek7App extends StatelessWidget {
         '/': (_) => const SplashScreen(),
         '/onboarding': (_) => const OnboardingScreen(),
         '/auth': (_) => const AuthScreen(),
+        '/forgot-password': (_) => const ForgotPasswordScreen(),
         '/home': (_) => const HomeScreen(),
+        '/wallet': (_) => const WalletScreen(),
+        '/run': (_) => const RunScreen(),
+        '/merchant': (_) => const MerchantDashboardScreen(),
       },
     );
   }
