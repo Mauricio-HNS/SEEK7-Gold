@@ -6,6 +6,7 @@ import '../features/home/screens/home_screen.dart';
 import '../features/mining/screens/live_mining_screen.dart';
 import '../features/merchant/screens/merchant_dashboard_screen.dart';
 import '../features/onboarding/screens/onboarding_screen.dart';
+import '../features/profile/screens/profile_screen.dart';
 import '../features/mining/screens/run_screen.dart';
 import '../features/auth/screens/splash_screen.dart';
 import '../features/wallet/screens/wallet_screen.dart';
@@ -20,6 +21,7 @@ class Seek7Routes {
   static const run = '/run';
   static const liveRun = '/live-run';
   static const merchant = '/merchant';
+  static const profile = '/profile';
 
   static Map<String, WidgetBuilder> get all => {
         splash: (_) => const SplashScreen(),
@@ -31,5 +33,6 @@ class Seek7Routes {
         run: (_) => const RunScreen(),
         liveRun: (_) => const LiveMiningScreen(),
         merchant: (_) => const MerchantDashboardScreen(),
+        profile: (_) => const ProfileScreen(),
       };
 }
