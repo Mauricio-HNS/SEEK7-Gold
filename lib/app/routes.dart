@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../screens/auth_screen.dart';
-import '../screens/forgot_password_screen.dart';
-import '../screens/home_screen.dart';
-import '../screens/live_mining_screen.dart';
-import '../screens/merchant_dashboard_screen.dart';
-import '../screens/onboarding_screen.dart';
-import '../screens/run_screen.dart';
-import '../screens/splash_screen.dart';
-import '../screens/wallet_screen.dart';
+import '../features/auth/screens/auth_screen.dart';
+import '../features/auth/screens/forgot_password_screen.dart';
+import '../features/home/screens/home_screen.dart';
+import '../features/mining/screens/live_mining_screen.dart';
+import '../features/merchant/screens/merchant_dashboard_screen.dart';
+import '../features/onboarding/screens/onboarding_screen.dart';
+import '../features/mining/screens/run_screen.dart';
+import '../features/auth/screens/splash_screen.dart';
+import '../features/wallet/screens/wallet_screen.dart';
 
 class Seek7Routes {
   static const splash = '/';
