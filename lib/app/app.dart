@@ -8,6 +8,7 @@ import '../screens/wallet_screen.dart';
 import '../screens/run_screen.dart';
 import '../screens/live_mining_screen.dart';
 import '../screens/merchant_dashboard_screen.dart';
+import 'routes.dart';
 
 class Seek7App extends StatelessWidget {
   const Seek7App({super.key});
@@ -26,18 +27,8 @@ class Seek7App extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (_) => const SplashScreen(),
-        '/onboarding': (_) => const OnboardingScreen(),
-        '/auth': (_) => const AuthScreen(),
-        '/forgot-password': (_) => const ForgotPasswordScreen(),
-        '/home': (_) => const HomeScreen(),
-        '/wallet': (_) => const WalletScreen(),
-        '/run': (_) => const RunScreen(),
-        '/live-run': (_) => const LiveMiningScreen(),
-        '/merchant': (_) => const MerchantDashboardScreen(),
-      },
+      initialRoute: Seek7Routes.splash,
+      routes: Seek7Routes.all,
     );
   }
 }
