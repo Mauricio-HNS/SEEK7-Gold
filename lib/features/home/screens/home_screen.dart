@@ -10,7 +10,14 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('SEEK7', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 3)),
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_none_rounded))],
+        actions: [IconButton(onPressed: () => showDialog<void>(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: const Text('Notifications'),
+            content: const Text('You are all caught up.'),
+            actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('OK'))],
+          ),
+        ), icon: const Icon(Icons.notifications_none_rounded))],
       ),
       bottomNavigationBar: NavigationBar(
         backgroundColor: Seek7Colors.surface,
@@ -18,6 +25,7 @@ class HomeScreen extends StatelessWidget {
         onDestinationSelected: (index) {
           if (index == 1) Navigator.pushNamed(context, '/wallet');
           if (index == 2) Navigator.pushNamed(context, '/run');
+          if (index == 3) Navigator.pushNamed(context, '/profile');
         },
         destinations: const [
           NavigationDestination(icon: Icon(Icons.explore_outlined), selectedIcon: Icon(Icons.explore), label: 'Explore'),
