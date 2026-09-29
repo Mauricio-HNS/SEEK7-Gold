@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../theme/seek7_theme.dart';
+import '../core/theme/seek7_theme.dart';
 import 'routes.dart';
 
 class Seek7App extends StatelessWidget {
