@@ -6,6 +6,7 @@ import '../screens/home_screen.dart';
 import '../screens/forgot_password_screen.dart';
 import '../screens/wallet_screen.dart';
 import '../screens/run_screen.dart';
+import '../screens/live_mining_screen.dart';
 import '../screens/merchant_dashboard_screen.dart';
 
 class Seek7App extends StatelessWidget {
@@ -34,6 +35,7 @@ class Seek7App extends StatelessWidget {
         '/home': (_) => const HomeScreen(),
         '/wallet': (_) => const WalletScreen(),
         '/run': (_) => const RunScreen(),
+        '/live-run': (_) => const LiveMiningScreen(),
         '/merchant': (_) => const MerchantDashboardScreen(),
       },
     );
