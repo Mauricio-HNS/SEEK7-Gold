@@ -10,6 +10,7 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   bool login = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +29,15 @@ class _AuthScreenState extends State<AuthScreen> {
           TextField(decoration: _decoration('Email', Icons.email_outlined)),
           const SizedBox(height: 14),
           TextField(obscureText: true, decoration: _decoration('Password', Icons.lock_outline)),
-          const SizedBox(height: 28),
+          if (login)
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () => Navigator.pushNamed(context, '/forgot-password'),
+                child: const Text('Forgot password?'),
+              ),
+            ),
+          const SizedBox(height: 18),
           GoldButton(label: login ? 'LOGIN' : 'CREATE ACCOUNT', onPressed: () {
             Navigator.pushReplacementNamed(context, '/home');
           }),
@@ -36,6 +45,11 @@ class _AuthScreenState extends State<AuthScreen> {
           Center(child: TextButton(
             onPressed: () => setState(() => login = !login),
             child: Text(login ? 'Create a new account' : 'I already have an account'),
+          )),
+          const SizedBox(height: 8),
+          Center(child: TextButton(
+            onPressed: () => Navigator.pushNamed(context, '/merchant'),
+            child: const Text('I am a business'),
           )),
         ]),
       ),
