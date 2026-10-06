@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../features/auth/screens/auth_screen.dart';
 import '../features/auth/screens/developer_screen.dart';
 import '../features/auth/screens/forgot_password_screen.dart';
-import '../features/home/screens/home_screen.dart';
+import '../features/home/screens/main_navigation_screen.dart';
 import '../features/mining/screens/live_mining_screen.dart';
 import '../features/merchant/screens/merchant_dashboard_screen.dart';
 import '../features/onboarding/screens/onboarding_screen.dart';
@@ -31,7 +31,7 @@ class Seek7Routes {
         auth: (_) => const AuthScreen(),
         developer: (_) => const DeveloperScreen(),
         forgotPassword: (_) => const ForgotPasswordScreen(),
-        home: (_) => const HomeScreen(),
+        home: (_) => const MainNavigationScreen(),
         wallet: (_) => const WalletScreen(),
         run: (_) => const RunScreen(),
         liveRun: (_) => const RunScreen(),
