@@ -160,6 +160,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   Icons.lock_outline,
                   controller: _passwordController,
                   obscure: obscurePassword,
+                  keyboardType: TextInputType.visiblePassword,
                   textInputAction: login ? TextInputAction.done : TextInputAction.next,
                   autocorrect: false,
                   enableSuggestions: false,
@@ -183,6 +184,8 @@ class _AuthScreenState extends State<AuthScreen> {
                     Icons.lock_reset_outlined,
                     controller: _confirmController,
                     obscure: obscureConfirm,
+                    keyboardType: TextInputType.visiblePassword,
+                    textInputAction: TextInputAction.done,
                     validator: (value) => Seek7AuthValidation.confirmPassword(
                       value,
                       _passwordController.text,
@@ -281,8 +284,9 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget _nameField() {
     return TextFormField(
       controller: _nameController,
-      keyboardType: TextInputType.text,
+      keyboardType: TextInputType.name,
       textInputAction: TextInputAction.next,
+      textCapitalization: TextCapitalization.words,
       autocorrect: false,
       enableSuggestions: false,
       validator: Seek7AuthValidation.name,
