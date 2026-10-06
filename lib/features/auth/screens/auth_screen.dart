@@ -140,17 +140,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
                 const SizedBox(height: 30),
                 if (!login) ...[
-                  _field(
-                    'Nome',
-                    Icons.person_outline,
-                    controller: _nameController,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    textCapitalization: TextCapitalization.none,
-                    autocorrect: false,
-                    enableSuggestions: false,
-                    validator: Seek7AuthValidation.name,
-                  ),
+                  _nameField(),
                   const SizedBox(height: 13),
                 ],
                 _field(
@@ -282,6 +272,62 @@ class _AuthScreenState extends State<AuthScreen> {
                 ],
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _nameField() {
+    return TextFormField(
+      controller: _nameController,
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
+      autocorrect: false,
+      enableSuggestions: false,
+      validator: Seek7AuthValidation.name,
+      maxLength: 100,
+      buildCounter: (
+        BuildContext context, {
+        required int currentLength,
+        required bool isFocused,
+        required int? maxLength,
+      }) => null,
+      decoration: InputDecoration(
+        labelText: 'Nome completo',
+        hintText: 'Digite seu nome',
+        prefixIcon: const Icon(
+          Icons.person_outline,
+          color: Seek7Colors.navy,
+        ),
+        filled: true,
+        fillColor: Seek7Colors.surface,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: Seek7Colors.blueLight),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: Seek7Colors.blueLight),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(
+            color: Seek7Colors.gold,
+            width: 2,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(
+            color: Colors.redAccent,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(
+            color: Colors.redAccent,
+            width: 2,
           ),
         ),
       ),
