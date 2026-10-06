@@ -45,7 +45,7 @@ class GoldBalance extends StatelessWidget {
 
 class GoldButton extends StatelessWidget {
   final String label;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const GoldButton({super.key, required this.label, required this.onPressed});
 
