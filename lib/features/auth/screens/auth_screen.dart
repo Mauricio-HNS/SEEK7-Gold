@@ -147,7 +147,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     controller: _nameController,
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.next,
-                    textCapitalization: TextCapitalization.none,
+                    textCapitalization: TextCapitalization.words,
                     autocorrect: false,
                     enableSuggestions: false,
                     enableIMEPersonalizedLearning: false,
@@ -303,6 +303,9 @@ class _AuthScreenState extends State<AuthScreen> {
     List<TextInputFormatter>? inputFormatters,
     bool autocorrect = false,
     bool enableSuggestions = false,
+    bool enableIMEPersonalizedLearning = true,
+    SmartDashesType? smartDashesType,
+    SmartQuotesType? smartQuotesType,
     TextCapitalization textCapitalization = TextCapitalization.none,
     Widget? suffixIcon,
   }) {
@@ -314,6 +317,9 @@ class _AuthScreenState extends State<AuthScreen> {
       inputFormatters: inputFormatters,
       autocorrect: autocorrect,
       enableSuggestions: enableSuggestions,
+      enableIMEPersonalizedLearning: enableIMEPersonalizedLearning,
+      smartDashesType: smartDashesType,
+      smartQuotesType: smartQuotesType,
       textCapitalization: textCapitalization,
       validator: validator,
       decoration: InputDecoration(
