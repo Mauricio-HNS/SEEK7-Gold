@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/seek7_theme.dart';
+import '../../core/theme/seek7_theme.dart';
 
 class GoldBalance extends StatelessWidget {
   final double balance;
