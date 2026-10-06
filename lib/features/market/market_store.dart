@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/foundation.dart';
 import 'models/gold_opportunity.dart';
 
@@ -45,77 +43,6 @@ class Seek7MarketStore extends ChangeNotifier {
   ];
 
   final Set<String> _completedByCurrentUser = {};
-
-  // Lightweight local prototype of the SEEK7 Interest Engine.
-  // Production must calculate this server-side and use explicit consent.
-  final Map<String, double> _interestScore = {
-    'Ferramentas': 0.90,
-    'Automóveis': 0.80,
-    'Tecnologia': 0.75,
-    'Restaurante': 0.65,
-    'Mercado': 0.55,
-    'Fitness': 0.45,
-    'Moda': 0.18,
-    'Beleza': 0.05,
-  };
-
-  double _distanceKm(double lat1, double lon1, double lat2, double lon2) {
-    const earthRadius = 6371.0;
-    final dLat = (lat2 - lat1) * math.pi / 180;
-    final dLon = (lon2 - lon1) * math.pi / 180;
-    final a = math.sin(dLat / 2) * math.sin(dLat / 2) +
-        math.cos(lat1 * math.pi / 180) *
-            math.cos(lat2 * math.pi / 180) *
-            math.sin(dLon / 2) *
-            math.sin(dLon / 2);
-    return earthRadius * 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
-  }
-
-  double relevanceFor(GoldOpportunity opportunity, double userLat, double userLon) {
-    final distance = _distanceKm(
-      userLat,
-      userLon,
-      opportunity.latitude,
-      opportunity.longitude,
-    );
-
-    final interest = _interestScore[opportunity.category] ?? 0.25;
-    final distanceScore = (1 - (distance / 5)).clamp(0.0, 1.0);
-    final availabilityScore =
-        (opportunity.completionsRemaining / 100).clamp(0.0, 1.0);
-
-    return (interest * 0.55) +
-        (distanceScore * 0.30) +
-        (availabilityScore * 0.15);
-  }
-
-  List<GoldOpportunity> nearbyOpportunities({
-    required double userLat,
-    required double userLon,
-  }) {
-    final available = _opportunities.where((opportunity) {
-      final distance = _distanceKm(
-        userLat,
-        userLon,
-        opportunity.latitude,
-        opportunity.longitude,
-      );
-      return distance <= 5 && canComplete(opportunity);
-    }).toList();
-
-    available.sort((a, b) {
-      return relevanceFor(b, userLat, userLon)
-          .compareTo(relevanceFor(a, userLat, userLon));
-    });
-
-    return available;
-  }
-
-  void registerInteraction(String category) {
-    final current = _interestScore[category] ?? 0.25;
-    _interestScore[category] = (current + 0.08).clamp(0.0, 1.0).toDouble();
-    notifyListeners();
-  }
 
   List<GoldOpportunity> get opportunities => List.unmodifiable(_opportunities);
 
