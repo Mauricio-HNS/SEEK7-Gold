@@ -227,6 +227,52 @@ class _TopBar extends StatelessWidget {
   }
 }
 
+class _LocationStatus extends StatelessWidget {
+  final bool real;
+
+  const _LocationStatus({required this.real});
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: .95),
+        borderRadius: BorderRadius.circular(14),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x22000000),
+            blurRadius: 10,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 8),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              real ? Icons.my_location : Icons.location_searching,
+              size: 16,
+              color: real ? Seek7Colors.success : Seek7Colors.muted,
+            ),
+            const SizedBox(width: 7),
+            Text(
+              real ? 'LOCALIZAÇÃO ATIVA' : 'MADRID · DEMO',
+              style: const TextStyle(
+                color: Seek7Colors.navy,
+                fontSize: 9,
+                fontWeight: FontWeight.w900,
+                letterSpacing: .7,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _MapHint extends StatelessWidget {
   final int count;
 
@@ -294,12 +340,23 @@ class _OpportunitySheetState extends State<_OpportunitySheet> {
         timer?.cancel();
         final wallet = Seek7WalletController.instance;
         final market = Seek7MarketStore.instance;
+        final reservation = OpportunityReservationStore.instance;
+
+        if (!reservation.isValid(widget.opportunity.id) ||
+            !market.canComplete(widget.opportunity)) {
+          setState(() {
+            seconds = 0;
+            completed = false;
+          });
+          return;
+        }
 
         wallet.credit(
           merchant: widget.opportunity.merchant,
           amount: widget.opportunity.reward,
         );
         market.consume(widget.opportunity.id);
+        reservation.release(widget.opportunity.id);
         MapControlEngine.instance
             .registerInteraction(widget.opportunity.category);
 
