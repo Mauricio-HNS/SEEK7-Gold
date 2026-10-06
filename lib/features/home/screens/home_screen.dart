@@ -281,6 +281,8 @@ class _OpportunitySheetState extends State<_OpportunitySheet> {
           amount: widget.opportunity.reward,
         );
         market.consume(widget.opportunity.id);
+        MapControlEngine.instance
+            .registerInteraction(widget.opportunity.category);
 
         setState(() {
           seconds = 0;
