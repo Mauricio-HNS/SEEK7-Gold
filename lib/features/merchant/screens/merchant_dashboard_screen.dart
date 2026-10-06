@@ -63,13 +63,13 @@ class _MerchantDashboardScreenState extends State<MerchantDashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SEEK7 PARA NEGÓCIOS'),
+        title: const Text('PUBLICAR NO SEEK7'),
       ),
       body: ListView(
         padding: const EdgeInsets.all(18),
         children: [
           const Text(
-            'PUBLIQUE E PAGUE POR ATENÇÃO',
+            'PUBLIQUE OU PROMOVA',
             style: TextStyle(
               color: Seek7Colors.navy,
               fontSize: 27,
@@ -78,11 +78,11 @@ class _MerchantDashboardScreenState extends State<MerchantDashboardScreen> {
           ),
           const SizedBox(height: 8),
           const Text(
-            'Coloque seu comércio no mapa. Você define quanto cada pessoa recebe.',
+            'Publique o que quiser. Você pode começar gratuitamente ou pagar para aumentar o alcance.',
             style: TextStyle(color: Seek7Colors.muted, fontSize: 15),
           ),
           const SizedBox(height: 22),
-          _field('Nome do comércio', merchantController, Icons.storefront),
+          _field('Nome, marca ou projeto', merchantController, Icons.storefront),
           const SizedBox(height: 12),
           _field('O que você quer anunciar?', titleController, Icons.campaign),
           const SizedBox(height: 12),
