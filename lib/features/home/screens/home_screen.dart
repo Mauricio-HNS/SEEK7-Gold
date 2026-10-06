@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -31,33 +32,89 @@ class _HomeScreenState extends State<HomeScreen> {
   double userLat = madrid.latitude;
   double userLon = madrid.longitude;
   bool usingRealLocation = false;
+  double mapZoom = 15.7;
 
-  List<GoldOpportunity> get nearby => mapControl
-      .decide(
+  List<MapDisplayItem> get displayItems => mapControl.displayItems(
         opportunities: market.opportunities,
         userLat: userLat,
         userLon: userLon,
         isEligible: market.canComplete,
-      )
-      .map((decision) => decision.opportunity)
-      .toList();
+        zoom: mapZoom,
+      );
+
+  int get nearbyCount => displayItems.fold<int>(
+        0,
+        (total, item) => total + (item is MapClusterItem ? item.count : 1),
+      );
 
   Set<Marker> get markers {
-    return nearby.map((opportunity) {
+    return displayItems.map((item) {
+      if (item is MapClusterItem) {
+        return Marker(
+          markerId: MarkerId(item.id),
+          position: LatLng(item.latitude, item.longitude),
+          icon: BitmapDescriptor.defaultMarkerWithHue(
+            BitmapDescriptor.hueYellow,
+          ),
+          consumeTapEvents: true,
+          infoWindow: InfoWindow(
+            title: item.count == 1
+                ? '1 oportunidade'
+                : '${item.count} oportunidades',
+            snippet: 'Toque para aproximar',
+          ),
+          onTap: () => _zoomIntoCluster(item),
+        );
+      }
+
+      final opportunity = (item as MapOpportunityItem).decision.opportunity;
       return Marker(
         markerId: MarkerId(opportunity.id),
         position: LatLng(opportunity.latitude, opportunity.longitude),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
+        icon: BitmapDescriptor.defaultMarkerWithHue(
+          BitmapDescriptor.hueYellow,
+        ),
         consumeTapEvents: true,
+        infoWindow: InfoWindow(
+          title: opportunity.merchant,
+          snippet: '€${opportunity.reward.toStringAsFixed(2)}',
+        ),
         onTap: () => _openOpportunity(opportunity),
       );
     }).toSet();
   }
 
+  Future<void> _zoomIntoCluster(MapClusterItem cluster) async {
+    final controller = mapController;
+    if (controller == null) return;
+
+    await controller.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(cluster.latitude, cluster.longitude),
+          zoom: math.min(mapZoom + 2.5, 18.0),
+        ),
+      ),
+    );
+  }
+
   Future<void> _openOpportunity(GoldOpportunity opportunity) async {
     if (!market.canComplete(opportunity)) return;
 
-
+    final reserved = reservation.reserve(
+      opportunity.id,
+      seconds: mapControl.config.reservationSeconds,
+    );
+    if (reserved == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Esta oportunidade acabou de ser ocupada.'),
+          ),
+        );
+      }
+      return;
+    }
 
     await showModalBottomSheet<void>(
       context: context,
@@ -94,6 +151,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 zoomControlsEnabled: false,
                 markers: markers,
                 onMapCreated: (controller) => mapController = controller,
+              onCameraMove: (position) {
+                if ((position.zoom - mapZoom).abs() < 0.05) return;
+                setState(() => mapZoom = position.zoom);
+              },
               ),
               Positioned(
                 top: MediaQuery.of(context).padding.top + 70,
@@ -110,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 left: 16,
                 right: 16,
                 bottom: MediaQuery.of(context).padding.bottom + 14,
-                child: _MapHint(count: nearby.length),
+                child: _MapHint(count: nearbyCount),
               ),
             ],
           ),
