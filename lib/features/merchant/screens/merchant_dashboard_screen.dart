@@ -17,6 +17,7 @@ class _MerchantDashboardScreenState extends State<MerchantDashboardScreen> {
   final budgetController = TextEditingController(text: '100');
 
   String category = 'Restaurante';
+  bool paidPromotion = true;
 
   final market = Seek7MarketStore.instance;
 
@@ -34,6 +35,21 @@ class _MerchantDashboardScreenState extends State<MerchantDashboardScreen> {
     final title = titleController.text.trim();
     final reward = double.tryParse(rewardController.text.replaceAll(',', '.'));
     final budget = double.tryParse(budgetController.text.replaceAll(',', '.'));
+
+    if (!paidPromotion) {
+      if (merchant.isEmpty || title.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Preencha o nome e o conteúdo da publicação.')),
+        );
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Publicação gratuita criada.')),
+      );
+      merchantController.clear();
+      titleController.clear();
+      return;
+    }
 
     if (merchant.isEmpty || title.isEmpty || reward == null || budget == null ||
         reward <= 0 || budget <= 0) {
@@ -99,7 +115,64 @@ class _MerchantDashboardScreenState extends State<MerchantDashboardScreen> {
             ].map((item) => DropdownMenuItem(value: item, child: Text(item))).toList(),
             onChanged: (value) => setState(() => category = value ?? category),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 18),
+          Container(
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: Seek7Colors.blueLight,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => setState(() => paidPromotion = false),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 13),
+                      decoration: BoxDecoration(
+                        color: !paidPromotion ? Colors.white : Colors.transparent,
+                        borderRadius: BorderRadius.circular(13),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'PUBLICAR GRÁTIS',
+                          style: TextStyle(
+                            color: Seek7Colors.navy,
+                            fontWeight: !paidPromotion ? FontWeight.w900 : FontWeight.w600,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => setState(() => paidPromotion = true),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 13),
+                      decoration: BoxDecoration(
+                        color: paidPromotion ? Colors.white : Colors.transparent,
+                        borderRadius: BorderRadius.circular(13),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'PROMOVER',
+                          style: TextStyle(
+                            color: Seek7Colors.navy,
+                            fontWeight: paidPromotion ? FontWeight.w900 : FontWeight.w600,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          if (paidPromotion) ...[
           Row(
             children: [
               Expanded(child: _field('Recompensa por pessoa (€)', rewardController, Icons.euro)),
@@ -107,6 +180,7 @@ class _MerchantDashboardScreenState extends State<MerchantDashboardScreen> {
               Expanded(child: _field('Orçamento total (€)', budgetController, Icons.account_balance_wallet)),
             ],
           ),
+          ],
           const SizedBox(height: 18),
           Container(
             padding: const EdgeInsets.all(16),
@@ -133,12 +207,12 @@ class _MerchantDashboardScreenState extends State<MerchantDashboardScreen> {
           ),
           const SizedBox(height: 18),
           GoldButton(
-            label: 'PUBLICAR NO MAPA',
+            label: paidPromotion ? 'PROMOVER NO MAPA' : 'PUBLICAR GRATUITAMENTE',
             onPressed: publish,
           ),
           const SizedBox(height: 28),
           const Text(
-            'OPORTUNIDADES ATIVAS',
+            'MINHAS PUBLICAÇÕES',
             style: TextStyle(
               color: Seek7Colors.muted,
               letterSpacing: 1.8,
