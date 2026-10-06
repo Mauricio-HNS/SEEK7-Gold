@@ -284,11 +284,11 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget _nameField() {
     return TextFormField(
       controller: _nameController,
-      keyboardType: TextInputType.name,
+      keyboardType: TextInputType.text,
       textInputAction: TextInputAction.next,
       textCapitalization: TextCapitalization.words,
-      autocorrect: false,
-      enableSuggestions: false,
+      autocorrect: true,
+      enableSuggestions: true,
       validator: Seek7AuthValidation.name,
       maxLength: 100,
       buildCounter: (
