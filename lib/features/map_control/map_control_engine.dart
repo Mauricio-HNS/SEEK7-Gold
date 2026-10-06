@@ -1,4 +1,4 @@
-import 'dart:math' as math';
+import 'dart:math' as math;
 
 import '../market/models/gold_opportunity.dart';
 import 'map_control_config.dart';
