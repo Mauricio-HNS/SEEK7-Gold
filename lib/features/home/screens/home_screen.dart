@@ -23,8 +23,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   GoogleMapController? mapController;
 
+  List<GoldOpportunity> get nearby => market.nearbyOpportunities(
+        userLat: madrid.latitude,
+        userLon: madrid.longitude,
+      );
+
   Set<Marker> get markers {
-    return market.opportunities.map((opportunity) {
+    return nearby.map((opportunity) {
       return Marker(
         markerId: MarkerId(opportunity.id),
         position: LatLng(opportunity.latitude, opportunity.longitude),
@@ -37,6 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _openOpportunity(GoldOpportunity opportunity) async {
     if (!market.canComplete(opportunity)) return;
+
+    // A completed/meaningful interaction becomes a signal for future relevance.
+    market.registerInteraction(opportunity.category);
 
     await showModalBottomSheet<void>(
       context: context,
@@ -77,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 left: 16,
                 right: 16,
                 bottom: MediaQuery.of(context).padding.bottom + 14,
-                child: _MapHint(count: market.opportunities.length),
+                child: _MapHint(count: nearby.length),
               ),
             ],
           ),
