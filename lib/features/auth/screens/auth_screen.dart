@@ -149,9 +149,9 @@ class _AuthScreenState extends State<AuthScreen> {
               Center(
                 child: OutlinedButton.icon(
                   onPressed: () =>
-                      Navigator.pushReplacementNamed(context, '/developer'),
+                      Navigator.pushReplacementNamed(context, '/home'),
                   icon: const Icon(Icons.developer_mode_rounded, size: 17),
-                  label: const Text('MODO DESENVOLVEDOR'),
+                  label: const Text('MODO DESENVOLVEDOR · ENTRAR NO APP'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Seek7Colors.navy,
                     side: const BorderSide(color: Seek7Colors.blueLight),
