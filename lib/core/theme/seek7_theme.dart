@@ -1,25 +1,16 @@
 import 'package:flutter/material.dart';
 
 class Seek7Colors {
-  // SEEK7 visual language:
-  // Black = the world / environment
-  // Gold = opportunity / mining / reward
-  // Blue = location / technology
-  // Green = confirmed money
-  // Red = errors / blocked actions
-
-  static const background = Color(0xFF070A0E);
-  static const surface = Color(0xFF10151B);
-  static const surface2 = Color(0xFF171D24);
-
-  static const gold = Color(0xFFD6B45A);
-  static const goldBright = Color(0xFFF2D06B);
-  static const goldLight = Color(0xFFFFE9A3);
-
-  static const text = Color(0xFFF5F2E9);
-  static const muted = Color(0xFF8B939D);
-
-  static const success = Color(0xFF43D19A);
-  static const error = Color(0xFFFF5C5C);
-  static const electricBlue = Color(0xFF5DA9FF);
+  static const gold = Color(0xFFFFD100);
+  static const goldDark = Color(0xFFD69E00);
+  static const navy = Color(0xFF1E4D8A);
+  static const blue = Color(0xFF4A7BB7);
+  static const blueLight = Color(0xFFBFD6EA);
+  static const background = Color(0xFFF4F8FC);
+  static const surface = Color(0xFFFFFFFF);
+  static const surface2 = Color(0xFFE8EEF4);
+  static const text = Color(0xFF1E2A36);
+  static const muted = Color(0xFF6F7F8F);
+  static const success = Color(0xFF168A58);
+  static const error = Color(0xFFD94848);
 }
