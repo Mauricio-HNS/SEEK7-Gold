@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../features/auth/screens/auth_screen.dart';
+import '../features/auth/screens/developer_screen.dart';
 import '../features/auth/screens/forgot_password_screen.dart';
 import '../features/home/screens/home_screen.dart';
 import '../features/mining/screens/live_mining_screen.dart';
@@ -15,6 +16,7 @@ class Seek7Routes {
   static const splash = '/';
   static const onboarding = '/onboarding';
   static const auth = '/auth';
+  static const developer = '/developer';
   static const forgotPassword = '/forgot-password';
   static const home = '/home';
   static const wallet = '/wallet';
@@ -27,6 +29,7 @@ class Seek7Routes {
         splash: (_) => const SplashScreen(),
         onboarding: (_) => const OnboardingScreen(),
         auth: (_) => const AuthScreen(),
+        developer: (_) => const DeveloperScreen(),
         forgotPassword: (_) => const ForgotPasswordScreen(),
         home: (_) => const HomeScreen(),
         wallet: (_) => const WalletScreen(),
