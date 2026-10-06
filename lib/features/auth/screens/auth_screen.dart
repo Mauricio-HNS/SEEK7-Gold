@@ -232,7 +232,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   label: loading
                       ? 'AGUARDE...'
                       : (login ? 'ENTRAR' : 'CRIAR MINHA CONTA'),
-                  onPressed: loading ? null : _submit,
+                  onPressed: loading ? null : () { _submit(); },
                 ),
                 const SizedBox(height: 16),
                 Center(
