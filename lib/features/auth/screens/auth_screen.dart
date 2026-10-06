@@ -145,11 +145,11 @@ class _AuthScreenState extends State<AuthScreen> {
                     'Nome',
                     Icons.person_outline,
                     controller: _nameController,
+                    keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
                     textCapitalization: TextCapitalization.words,
                     autocorrect: true,
                     enableSuggestions: true,
-                    inputFormatters: [Seek7AuthInputFormatter.maxLength(100)],
                     validator: Seek7AuthValidation.name,
                   ),
                   const SizedBox(height: 13),
@@ -163,7 +163,6 @@ class _AuthScreenState extends State<AuthScreen> {
                   autocorrect: false,
                   enableSuggestions: false,
                   textCapitalization: TextCapitalization.none,
-                  inputFormatters: [Seek7AuthInputFormatter.maxLength(254)],
                   validator: Seek7AuthValidation.email,
                 ),
                 const SizedBox(height: 13),
@@ -176,7 +175,6 @@ class _AuthScreenState extends State<AuthScreen> {
                   autocorrect: false,
                   enableSuggestions: false,
                   textCapitalization: TextCapitalization.none,
-                  inputFormatters: [Seek7AuthInputFormatter.maxLength(128)],
                   validator: Seek7AuthValidation.password,
                   suffixIcon: IconButton(
                     onPressed: () => setState(
@@ -196,7 +194,6 @@ class _AuthScreenState extends State<AuthScreen> {
                     Icons.lock_reset_outlined,
                     controller: _confirmController,
                     obscure: obscureConfirm,
-                    inputFormatters: [Seek7AuthInputFormatter.maxLength(128)],
                     validator: (value) => Seek7AuthValidation.confirmPassword(
                       value,
                       _passwordController.text,
