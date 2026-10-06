@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/auth/seek7_auth_validation.dart';
 import '../../../core/theme/seek7_theme.dart';
 import '../../../shared/widgets/seek7_widgets.dart';
 
@@ -80,27 +81,6 @@ class _AuthScreenState extends State<AuthScreen> {
     Navigator.pushReplacementNamed(context, '/home');
   }
 
-  String? _required(String? value, String label) {
-    if (value == null || value.trim().isEmpty) return 'Informe $label.';
-    return null;
-  }
-
-  String? _emailValidator(String? value) {
-    final required = _required(value, 'seu e-mail');
-    if (required != null) return required;
-    if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(value!.trim())) {
-      return 'Informe um e-mail válido.';
-    }
-    return null;
-  }
-
-  String? _passwordValidator(String? value) {
-    final required = _required(value, 'uma senha');
-    if (required != null) return required;
-    if (value!.length < 6) return 'A senha deve ter pelo menos 6 caracteres.';
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -168,7 +148,8 @@ class _AuthScreenState extends State<AuthScreen> {
                     textCapitalization: TextCapitalization.words,
                     autocorrect: true,
                     enableSuggestions: true,
-                    validator: (value) => _required(value, 'seu nome'),
+                    inputFormatters: [Seek7AuthInputFormatter.maxLength(100)],
+                    validator: Seek7AuthValidation.name,
                   ),
                   const SizedBox(height: 13),
                 ],
@@ -181,7 +162,8 @@ class _AuthScreenState extends State<AuthScreen> {
                   autocorrect: false,
                   enableSuggestions: false,
                   textCapitalization: TextCapitalization.none,
-                  validator: _emailValidator,
+                  inputFormatters: [Seek7AuthInputFormatter.maxLength(254)],
+                  validator: Seek7AuthValidation.email,
                 ),
                 const SizedBox(height: 13),
                 _field(
@@ -193,7 +175,8 @@ class _AuthScreenState extends State<AuthScreen> {
                   autocorrect: false,
                   enableSuggestions: false,
                   textCapitalization: TextCapitalization.none,
-                  validator: _passwordValidator,
+                  inputFormatters: [Seek7AuthInputFormatter.maxLength(128)],
+                  validator: Seek7AuthValidation.password,
                   suffixIcon: IconButton(
                     onPressed: () => setState(
                       () => obscurePassword = !obscurePassword,
@@ -212,12 +195,11 @@ class _AuthScreenState extends State<AuthScreen> {
                     Icons.lock_reset_outlined,
                     controller: _confirmController,
                     obscure: obscureConfirm,
-                    validator: (value) {
-                      if (value != _passwordController.text) {
-                        return 'As senhas não coincidem.';
-                      }
-                      return null;
-                    },
+                    inputFormatters: [Seek7AuthInputFormatter.maxLength(128)],
+                    validator: (value) => Seek7AuthValidation.confirmPassword(
+                      value,
+                      _passwordController.text,
+                    ),
                     suffixIcon: IconButton(
                       onPressed: () => setState(
                         () => obscureConfirm = !obscureConfirm,
@@ -317,6 +299,7 @@ class _AuthScreenState extends State<AuthScreen> {
     bool obscure = false,
     TextInputType? keyboardType,
     TextInputAction? textInputAction,
+    List<TextInputFormatter>? inputFormatters,
     bool autocorrect = false,
     bool enableSuggestions = false,
     TextCapitalization textCapitalization = TextCapitalization.none,
@@ -327,6 +310,7 @@ class _AuthScreenState extends State<AuthScreen> {
       obscureText: obscure,
       keyboardType: keyboardType,
       textInputAction: textInputAction,
+      inputFormatters: inputFormatters,
       autocorrect: autocorrect,
       enableSuggestions: enableSuggestions,
       textCapitalization: textCapitalization,
