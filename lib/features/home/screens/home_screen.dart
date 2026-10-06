@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../core/theme/seek7_theme.dart';
+import '../../../core/location/seek7_location_service.dart';
 import '../../../shared/widgets/seek7_widgets.dart';
 import '../../market/market_store.dart';
 import '../../market/models/gold_opportunity.dart';
 import '../../map_control/map_control_engine.dart';
+import '../../map_control/opportunity_reservation.dart';
 import '../../wallet/wallet_controller.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,14 +24,19 @@ class _HomeScreenState extends State<HomeScreen> {
   final market = Seek7MarketStore.instance;
   final wallet = Seek7WalletController.instance;
   final mapControl = MapControlEngine.instance;
+  final reservation = OpportunityReservationStore.instance;
+  final location = Seek7LocationService.instance;
 
   GoogleMapController? mapController;
+  double userLat = madrid.latitude;
+  double userLon = madrid.longitude;
+  bool usingRealLocation = false;
 
   List<GoldOpportunity> get nearby => mapControl
       .decide(
         opportunities: market.opportunities,
-        userLat: madrid.latitude,
-        userLon: madrid.longitude,
+        userLat: userLat,
+        userLon: userLon,
         isEligible: market.canComplete,
       )
       .map((decision) => decision.opportunity)
@@ -63,6 +70,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _loadUserLocation();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: Listenable.merge([market, wallet]),
@@ -77,9 +90,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 mapType: MapType.normal,
                 myLocationButtonEnabled: true,
+                myLocationEnabled: usingRealLocation,
                 zoomControlsEnabled: false,
                 markers: markers,
                 onMapCreated: (controller) => mapController = controller,
+              ),
+              Positioned(
+                top: MediaQuery.of(context).padding.top + 70,
+                right: 16,
+                child: _LocationStatus(real: usingRealLocation),
               ),
               Positioned(
                 top: MediaQuery.of(context).padding.top + 10,
