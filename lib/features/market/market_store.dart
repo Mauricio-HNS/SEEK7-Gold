@@ -113,7 +113,7 @@ class Seek7MarketStore extends ChangeNotifier {
 
   void registerInteraction(String category) {
     final current = _interestScore[category] ?? 0.25;
-    _interestScore[category] = (current + 0.08).clamp(0.0, 1.0);
+    _interestScore[category] = (current + 0.08).clamp(0.0, 1.0).toDouble();
     notifyListeners();
   }
 
