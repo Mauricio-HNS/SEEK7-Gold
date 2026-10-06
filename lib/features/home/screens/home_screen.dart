@@ -135,6 +135,26 @@ class _HomeScreenState extends State<HomeScreen> {
     _loadMoneyMarker();
   }
 
+  Future<void> _loadUserLocation() async {
+    final position = await location.currentPosition();
+    if (!mounted || position == null) return;
+
+    setState(() {
+      userLat = position.latitude;
+      userLon = position.longitude;
+      usingRealLocation = true;
+    });
+
+    final controller = mapController;
+    if (controller != null) {
+      await controller.animateCamera(
+        CameraUpdate.newLatLng(
+          LatLng(position.latitude, position.longitude),
+        ),
+      );
+    }
+  }
+
   Future<void> _loadMoneyMarker() async {
     final icon = await Seek7MarkerIcons.money();
     if (!mounted) return;
