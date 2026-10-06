@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../core/theme/seek7_theme.dart';
 import '../../../core/location/seek7_location_service.dart';
+import '../../../core/map/seek7_marker_icons.dart';
 import '../../../shared/widgets/seek7_widgets.dart';
 import '../../market/market_store.dart';
 import '../../market/models/gold_opportunity.dart';
@@ -33,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   double userLon = madrid.longitude;
   bool usingRealLocation = false;
   double mapZoom = 15.7;
+  BitmapDescriptor? moneyMarker;
 
   List<MapDisplayItem> get displayItems => mapControl.displayItems(
         opportunities: market.opportunities,
@@ -71,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return Marker(
         markerId: MarkerId(opportunity.id),
         position: LatLng(opportunity.latitude, opportunity.longitude),
-        icon: BitmapDescriptor.defaultMarkerWithHue(
+        icon: moneyMarker ?? BitmapDescriptor.defaultMarkerWithHue(
           BitmapDescriptor.hueYellow,
         ),
         consumeTapEvents: true,
@@ -130,6 +132,13 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _loadUserLocation();
+    _loadMoneyMarker();
+  }
+
+  Future<void> _loadMoneyMarker() async {
+    final icon = await Seek7MarkerIcons.money();
+    if (!mounted) return;
+    setState(() => moneyMarker = icon);
   }
 
   @override
