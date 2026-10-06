@@ -7,6 +7,7 @@ import '../../../core/theme/seek7_theme.dart';
 import '../../../shared/widgets/seek7_widgets.dart';
 import '../../market/market_store.dart';
 import '../../market/models/gold_opportunity.dart';
+import '../../map_control/map_control_engine.dart';
 import '../../wallet/wallet_controller.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,13 +21,19 @@ class _HomeScreenState extends State<HomeScreen> {
   static const madrid = LatLng(40.4168, -3.7038);
   final market = Seek7MarketStore.instance;
   final wallet = Seek7WalletController.instance;
+  final mapControl = MapControlEngine.instance;
 
   GoogleMapController? mapController;
 
-  List<GoldOpportunity> get nearby => market.nearbyOpportunities(
+  List<GoldOpportunity> get nearby => mapControl
+      .decide(
+        opportunities: market.opportunities,
         userLat: madrid.latitude,
         userLon: madrid.longitude,
-      );
+        isEligible: market.canComplete,
+      )
+      .map((decision) => decision.opportunity)
+      .toList();
 
   Set<Marker> get markers {
     return nearby.map((opportunity) {
@@ -43,8 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _openOpportunity(GoldOpportunity opportunity) async {
     if (!market.canComplete(opportunity)) return;
 
-    // A completed/meaningful interaction becomes a signal for future relevance.
-    market.registerInteraction(opportunity.category);
+
 
     await showModalBottomSheet<void>(
       context: context,
