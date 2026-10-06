@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/theme/seek7_theme.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,11 +14,19 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(milliseconds: 1600), () {
-      if (mounted) {
-        Navigator.pushReplacementNamed(context, '/onboarding');
-      }
-    });
+    _openNextScreen();
+  }
+
+  Future<void> _openNextScreen() async {
+    await Future<void>.delayed(const Duration(milliseconds: 1600));
+    final prefs = await SharedPreferences.getInstance();
+    final loggedIn = prefs.getBool('seek7_logged_in') ?? false;
+
+    if (!mounted) return;
+    Navigator.pushReplacementNamed(
+      context,
+      loggedIn ? '/home' : '/onboarding',
+    );
   }
 
   @override
