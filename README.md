@@ -1,3 +1,4 @@
+<img width="1214" height="1295" alt="SEEK7" src="https://github.com/user-attachments/assets/59453c01-abef-448d-8486-796e8ae70288" />
 # SEEK7 Gold
 
 <p align="center">
