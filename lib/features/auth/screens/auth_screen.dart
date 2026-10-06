@@ -166,6 +166,8 @@ class _AuthScreenState extends State<AuthScreen> {
                     controller: _nameController,
                     textInputAction: TextInputAction.next,
                     textCapitalization: TextCapitalization.words,
+                    autocorrect: true,
+                    enableSuggestions: true,
                     validator: (value) => _required(value, 'seu nome'),
                   ),
                   const SizedBox(height: 13),
