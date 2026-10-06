@@ -1,25 +1,56 @@
-# SEEK7 Gold
+# SEEK7
 
-**Discover the city. Earn from it.**
+## Encontre. Faça. Ganhe.
 
-SEEK7 turns the city into an interactive map of paid discovery opportunities.
+SEEK7 transforma o mapa da cidade em um mercado de pequenas oportunidades pagas.
 
-## Core loop
-1. Create an account
-2. See the wallet and nearby opportunities
-3. Start a 20-minute SEEK Run
-4. Discover Gold Spots
-5. Complete a 5-second sponsored experience
-6. Receive the reward
-7. Continue exploring until the run ends
-8. Wait for the next run and repeat
+### Para quem quer ganhar
 
-## MVP
-Consumer: Splash → Onboarding → Sign up → Login → Home → Map → Start Run → Gold Spot → 5-second experience → Reward → Wallet → History → Profile.
+1. Abra o mapa.
+2. Procure pins dourados discretos.
+3. Toque em uma oportunidade.
+4. Assista à experiência patrocinada por 5 segundos.
+5. Receba a recompensa na carteira.
 
-Merchant: Merchant login → Dashboard → Campaign → Location → Video → Budget → Reward rules → Campaign analytics.
+### Para empresas
 
-Platform: Campaigns, wallet ledger, reward engine, verification/fraud engine, notifications and analytics.
+1. Publique uma campanha.
+2. Defina o valor pago por conclusão.
+3. Defina o orçamento.
+4. Sua oportunidade aparece no mapa.
+5. Acompanhe as conclusões.
 
-## Production requirements
-Real-money withdrawals, KYC/AML, payment rails, advertising compliance, location permissions and merchant contracts require appropriate regulated/payment providers and legal review before production launch.
+### Conceito do MVP
+
+O pin dourado é o elemento central do produto. Ele representa um comércio que está pagando pela atenção de pessoas próximas.
+
+O usuário não precisa iniciar um "run" de 20 minutos. Ele simplesmente procura oportunidades no mapa quando quiser.
+
+### Estado atual
+
+O projeto contém um MVP de interface com:
+
+- Splash e identidade visual SEEK7
+- Onboarding
+- Mapa Google Maps
+- Pins dourados clicáveis
+- Experiência patrocinada de 5 segundos em modo protótipo
+- Crédito de recompensa na carteira
+- Histórico local de recompensas
+- Publicação de campanhas em modo protótipo
+- Mercado compartilhado entre mapa e área de negócios
+
+### Próximas etapas para produção
+
+- Backend e autenticação real
+- Banco de dados de campanhas e ledger de recompensas
+- Vídeos reais e verificação de visualização
+- Geolocalização e seleção precisa do comércio
+- Antifraude e limites por usuário/dispositivo
+- Checkout para anunciantes
+- KYC/AML e provedor de pagamentos para saques
+- Termos, privacidade e regras de publicidade
+- Analytics para anunciantes
+- Configuração das chaves do Google Maps para Android/iOS/Web
+
+> O saldo e as campanhas atuais são locais, apenas para demonstração. Nenhum pagamento real é processado pelo MVP.
