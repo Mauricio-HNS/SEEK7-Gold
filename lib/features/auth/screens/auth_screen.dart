@@ -48,9 +48,9 @@ class _AuthScreenState extends State<AuthScreen> {
                 ],
               ),
               const SizedBox(height: 54),
-              Text(
-                login ? 'BEM-VINDO AO SEEK7' : 'BEM-VINDO AO SEEK7',
-                style: const TextStyle(
+              const Text(
+                'BEM-VINDO AO SEEK7',
+                style: TextStyle(
                   color: Seek7Colors.navy,
                   fontSize: 30,
                   fontWeight: FontWeight.w900,
@@ -145,6 +145,26 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                 ),
               ],
+              const SizedBox(height: 28),
+              Center(
+                child: OutlinedButton.icon(
+                  onPressed: () =>
+                      Navigator.pushReplacementNamed(context, '/developer'),
+                  icon: const Icon(Icons.developer_mode_rounded, size: 17),
+                  label: const Text('MODO DESENVOLVEDOR'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Seek7Colors.navy,
+                    side: const BorderSide(color: Seek7Colors.blueLight),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
