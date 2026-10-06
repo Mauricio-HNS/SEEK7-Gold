@@ -34,7 +34,7 @@ class Seek7Routes {
         home: (_) => const HomeScreen(),
         wallet: (_) => const WalletScreen(),
         run: (_) => const RunScreen(),
-        liveRun: (_) => const LiveMiningScreen(),
+        liveRun: (_) => const RunScreen(),
         merchant: (_) => const MerchantDashboardScreen(),
         profile: (_) => const ProfileScreen(),
       };
