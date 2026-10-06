@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class Seek7Colors {
   static const gold = Color(0xFFFFD100);
+  static const goldBright = Color(0xFFFFD100);
   static const goldDark = Color(0xFFD69E00);
   static const navy = Color(0xFF1E4D8A);
   static const blue = Color(0xFF4A7BB7);
