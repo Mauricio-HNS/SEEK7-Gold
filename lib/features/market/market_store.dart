@@ -42,6 +42,8 @@ class Seek7MarketStore extends ChangeNotifier {
     ),
   ];
 
+  final Set<String> _completedByCurrentUser = {};
+
   List<GoldOpportunity> get opportunities => List.unmodifiable(_opportunities);
 
   void publish({
@@ -70,12 +72,18 @@ class Seek7MarketStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool canComplete(GoldOpportunity opportunity) =>
-      opportunity.completionsRemaining > 0;
+  bool canComplete(GoldOpportunity opportunity) {
+    return opportunity.completionsRemaining > 0 &&
+        !_completedByCurrentUser.contains(opportunity.id);
+  }
 
   void consume(String id) {
+    if (_completedByCurrentUser.contains(id)) return;
+
     final index = _opportunities.indexWhere((item) => item.id == id);
     if (index < 0) return;
+
+    _completedByCurrentUser.add(id);
 
     final item = _opportunities[index];
     if (item.completionsRemaining <= 1) {
