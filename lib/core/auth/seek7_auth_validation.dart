@@ -1,5 +1,3 @@
-import 'package:flutter/services.dart';
-
 class Seek7AuthValidation {
   static String? name(String? value) {
     final text = value?.trim() ?? '';
@@ -7,7 +5,9 @@ class Seek7AuthValidation {
     if (text.runes.length < 2) return 'O nome deve ter pelo menos 2 caracteres.';
     if (text.runes.length > 100) return 'O nome é muito longo.';
     if (_hasControlCharacters(text)) return 'O nome contém caracteres inválidos.';
-    if (!_hasLetter(text)) return 'Informe um nome válido.';
+    if (!RegExp(r'\p{L}', unicode: true).hasMatch(text)) {
+      return 'Informe um nome válido.';
+    }
     return null;
   }
 
@@ -69,10 +69,3 @@ class Seek7AuthValidation {
       text.runes.any((rune) => (rune < 0x20 && rune != 0x09) || rune == 0x7F);
 }
 
-class Seek7AuthInputFormatter {
-  const Seek7AuthInputFormatter._();
-
-  static TextInputFormatter maxLength(int max) {
-    return LengthLimitingTextInputFormatter(max);
-  }
-}
