@@ -2,14 +2,23 @@
 
 <p align="center">
   <strong>Encontre. Faça. Ganhe.</strong><br>
-  Transforme o mapa da cidade em um mercado inteligente de oportunidades.
+  <sub>Um marketplace geográfico de oportunidades patrocinadas.</sub>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter&logoColor=white" alt="Flutter">
   <img src="https://img.shields.io/badge/Dart-3.x-0175C2?logo=dart&logoColor=white" alt="Dart">
+  <img src="https://img.shields.io/badge/Google%20Maps-Integrated-4285F4?logo=googlemaps&logoColor=white" alt="Google Maps">
+  <img src="https://img.shields.io/badge/Architecture-Feature--based-111827" alt="Architecture">
   <img src="https://img.shields.io/badge/Status-MVP-FFD21F" alt="MVP">
-  <img src="https://img.shields.io/badge/Platform-iOS%20%7C%20Android%20%7C%20Web-111827" alt="Platforms">
+</p>
+
+<p align="center">
+  <a href="#produto">Produto</a> ·
+  <a href="#experiência-do-app">Experiência</a> ·
+  <a href="#como-funciona">Como funciona</a> ·
+  <a href="#arquitetura">Arquitetura</a> ·
+  <a href="#roadmap">Roadmap</a>
 </p>
 
 ---
@@ -26,7 +35,7 @@ O mapa deixa de ser apenas uma ferramenta de navegação e passa a mostrar **opo
 
 ## Experiência do app
 
-### Descobrir → Escolher → Interagir → Ganhar
+### Descobrir → Escolher → Interagir → Validar → Ganhar
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/59453c01-abef-448d-8486-796e8ae70288" alt="SEEK7 Gold — tela do aplicativo" width="300">
@@ -34,11 +43,17 @@ O mapa deixa de ser apenas uma ferramenta de navegação e passa a mostrar **opo
 
 <p align="center"><sub>Prévia da experiência SEEK7 Gold</sub></p>
 
-> As telas reais do aplicativo serão apresentadas nesta seção conforme os screenshots forem adicionados ao repositório.
+> Esta seção será ampliada com screenshots reais das principais telas do aplicativo à medida que forem adicionados ao repositório.
 
 ---
 
 ## Como funciona
+
+```text
+DESCOBRIR → ESCOLHER → INTERAGIR → VALIDAR → GANHAR
+    ↑                                             ↓
+    └──────────── novas oportunidades ───────────┘
+```
 
 | Etapa | O que acontece |
 |---|---|
@@ -52,7 +67,11 @@ O mapa deixa de ser apenas uma ferramenta de navegação e passa a mostrar **opo
 
 ## O diferencial
 
-O SEEK7 não foi pensado como mais uma plataforma tradicional de anúncios. A ideia é criar um **mercado geográfico de atenção**.
+O SEEK7 não foi desenhado como uma simples lista de anúncios. O núcleo do produto é um **motor de decisão geográfico** que combina contexto, regras de campanha e disponibilidade para determinar quais oportunidades fazem sentido para cada usuário.
+
+### Oportunidade certa, pessoa certa, momento certo
+
+A proposta é criar um **mercado geográfico de atenção**, no qual a publicidade deixa de ser apenas exposição e passa a gerar uma ação mensurável.
 
 As oportunidades podem ser selecionadas considerando:
 
@@ -99,7 +118,7 @@ O objetivo é transformar publicidade local em **performance mensurável**.
 
 ## Arquitetura
 
-O projeto está organizado por domínio/feature, mantendo separação entre interface, regras de negócio e infraestrutura.
+O projeto utiliza uma organização **feature-based**, mantendo separação entre interface, regras de negócio e infraestrutura. O objetivo é permitir que o MVP evolua para uma plataforma distribuída sem precisar reconstruir o domínio do produto.
 
 ```
 lib/
@@ -118,7 +137,7 @@ lib/
     └── widgets/
 ```
 
-### Engine de oportunidades
+### Engines principais
 
 O núcleo já possui componentes dedicados para:
 
@@ -135,7 +154,9 @@ O núcleo já possui componentes dedicados para:
 
 ## Estado atual
 
-O MVP possui:
+### MVP implementado
+
+O MVP já possui:
 
 - Splash e identidade SEEK7
 - Onboarding
@@ -199,7 +220,11 @@ O MVP possui:
 
 O SEEK7 Gold pode evoluir para uma infraestrutura de **publicidade local orientada por contexto**, na qual o mapa funciona como uma camada dinâmica de oportunidades.
 
-Em vez de simplesmente mostrar anúncios, o sistema decide:
+A pergunta central do produto é:
+
+> **Qual oportunidade tem maior valor para esta pessoa, neste lugar, neste momento?**
+
+A partir dessa pergunta, o sistema poderá decidir:
 
 **quem deve ver → onde deve ver → quando deve ver → quanto vale a ação → qual campanha tem maior potencial de conversão.**
 
@@ -222,7 +247,9 @@ Em vez de simplesmente mostrar anúncios, o sistema decide:
 
 ## Desenvolvimento
 
-Projeto em evolução contínua, com foco em transformar o MVP em uma arquitetura pronta para produção, mantendo uma experiência simples para o usuário e um motor sofisticado de decisão.
+Projeto em evolução contínua, com foco em transformar o MVP em uma plataforma pronta para produção.
+
+O código está estruturado para separar experiência, regras de negócio e infraestrutura, permitindo evoluir o produto em quatro frentes: **marketplace, monetização, inteligência e antifraude.**
 
 <p align="center">
   <strong>SEEK7 Gold</strong><br>
