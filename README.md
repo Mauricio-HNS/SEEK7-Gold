@@ -38,7 +38,7 @@ O mapa deixa de ser apenas uma ferramenta de navegação e passa a mostrar **opo
 ### Descobrir → Escolher → Interagir → Validar → Ganhar
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/59453c01-abef-448d-8486-796e8ae70288" alt="SEEK7 Gold — tela do aplicativo" width="300">
+  <img src="https://github.com/user-attachments/assets/59453c01-abef-448d-8486-796e8ae70288" alt="SEEK7 Gold — tela do aplicativo" width="700">
 </div>
 
 <p align="center"><sub>Prévia da experiência SEEK7 Gold</sub></p>
