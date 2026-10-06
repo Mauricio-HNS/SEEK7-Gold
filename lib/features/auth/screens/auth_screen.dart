@@ -1,4 +1,7 @@
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/theme/seek7_theme.dart';
 import '../../../shared/widgets/seek7_widgets.dart';
 
@@ -10,154 +13,308 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmController = TextEditingController();
+
   bool login = false;
+  bool loading = false;
+  bool obscurePassword = true;
+  bool obscureConfirm = true;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmController.dispose();
+    super.dispose();
+  }
+
+  Future<String> _hashPassword(String value) async {
+    return sha256.convert(utf8.encode(value)).toString();
+  }
+
+  Future<void> _submit() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => loading = true);
+    final prefs = await SharedPreferences.getInstance();
+    final email = _emailController.text.trim().toLowerCase();
+    final passwordHash = await _hashPassword(_passwordController.text);
+
+    if (login) {
+      final savedEmail = prefs.getString('seek7_account_email');
+      final savedHash = prefs.getString('seek7_account_password_hash');
+
+      if (savedEmail != email || savedHash != passwordHash) {
+        if (!mounted) return;
+        setState(() => loading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('E-mail ou senha incorretos.')),
+        );
+        return;
+      }
+    } else {
+      final existingEmail = prefs.getString('seek7_account_email');
+      if (existingEmail == email) {
+        if (!mounted) return;
+        setState(() => loading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Este e-mail já possui uma conta.')),
+        );
+        return;
+      }
+
+      await prefs.setString('seek7_account_name', _nameController.text.trim());
+      await prefs.setString('seek7_account_email', email);
+      await prefs.setString('seek7_account_password_hash', passwordHash);
+    }
+
+    await prefs.setBool('seek7_logged_in', true);
+
+    if (!mounted) return;
+    setState(() => loading = false);
+    Navigator.pushReplacementNamed(context, '/home');
+  }
+
+  String? _required(String? value, String label) {
+    if (value == null || value.trim().isEmpty) return 'Informe $label.';
+    return null;
+  }
+
+  String? _emailValidator(String? value) {
+    final required = _required(value, 'seu e-mail');
+    if (required != null) return required;
+    if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(value!.trim())) {
+      return 'Informe um e-mail válido.';
+    }
+    return null;
+  }
+
+  String? _passwordValidator(String? value) {
+    final required = _required(value, 'uma senha');
+    if (required != null) return required;
+    if (value!.length < 6) return 'A senha deve ter pelo menos 6 caracteres.';
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(24, 24, 24, 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: Seek7Colors.gold,
-                      borderRadius: BorderRadius.circular(14),
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 30),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: Seek7Colors.gold,
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: const Icon(
+                        Icons.location_on_rounded,
+                        color: Seek7Colors.navy,
+                      ),
                     ),
-                    child: const Icon(
-                      Icons.location_on_rounded,
-                      color: Seek7Colors.navy,
+                    const SizedBox(width: 11),
+                    const Text(
+                      'SEEK7',
+                      style: TextStyle(
+                        color: Seek7Colors.navy,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 2,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 54),
+                Text(
+                  login ? 'ENTRAR NO SEEK7' : 'CRIAR CONTA',
+                  style: const TextStyle(
+                    color: Seek7Colors.navy,
+                    fontSize: 30,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 9),
+                Text(
+                  login
+                      ? 'Entre na sua conta e continue de onde parou.'
+                      : 'Uma conta. Várias possibilidades. Encontre, ganhe ou divulgue.',
+                  style: const TextStyle(
+                    color: Seek7Colors.muted,
+                    fontSize: 15,
+                    height: 1.4,
+                  ),
+                ),
+                const SizedBox(height: 30),
+                if (!login) ...[
+                  _field(
+                    'Nome',
+                    Icons.person_outline,
+                    controller: _nameController,
+                    validator: (value) => _required(value, 'seu nome'),
+                  ),
+                  const SizedBox(height: 13),
+                ],
+                _field(
+                  'E-mail',
+                  Icons.email_outlined,
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: _emailValidator,
+                ),
+                const SizedBox(height: 13),
+                _field(
+                  'Senha',
+                  Icons.lock_outline,
+                  controller: _passwordController,
+                  obscure: obscurePassword,
+                  validator: _passwordValidator,
+                  suffixIcon: IconButton(
+                    onPressed: () => setState(
+                      () => obscurePassword = !obscurePassword,
+                    ),
+                    icon: Icon(
+                      obscurePassword
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
                     ),
                   ),
-                  const SizedBox(width: 11),
-                  const Text(
-                    'SEEK7',
-                    style: TextStyle(
-                      color: Seek7Colors.navy,
-                      fontSize: 25,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 2,
+                ),
+                if (!login) ...[
+                  const SizedBox(height: 13),
+                  _field(
+                    'Confirmar senha',
+                    Icons.lock_reset_outlined,
+                    controller: _confirmController,
+                    obscure: obscureConfirm,
+                    validator: (value) {
+                      if (value != _passwordController.text) {
+                        return 'As senhas não coincidem.';
+                      }
+                      return null;
+                    },
+                    suffixIcon: IconButton(
+                      onPressed: () => setState(
+                        () => obscureConfirm = !obscureConfirm,
+                      ),
+                      icon: Icon(
+                        obscureConfirm
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                      ),
                     ),
                   ),
                 ],
-              ),
-              const SizedBox(height: 54),
-              const Text(
-                'BEM-VINDO AO SEEK7',
-                style: TextStyle(
-                  color: Seek7Colors.navy,
-                  fontSize: 30,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              const SizedBox(height: 9),
-              Text(
-                login
-                    ? 'Entre na sua conta e continue de onde parou.'
-                    : 'Uma conta. Várias possibilidades. Encontre, ganhe ou divulgue.',
-                style: const TextStyle(
-                  color: Seek7Colors.muted,
-                  fontSize: 15,
-                  height: 1.4,
-                ),
-              ),
-              const SizedBox(height: 30),
-              if (login) ...[
-                _field('E-mail', Icons.email_outlined),
-                const SizedBox(height: 13),
-                _field('Senha', Icons.lock_outline, obscure: true),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () =>
-                        Navigator.pushNamed(context, '/forgot-password'),
-                    child: const Text('Esqueci minha senha'),
+                if (login)
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, '/forgot-password'),
+                      child: const Text('Esqueci minha senha'),
+                    ),
                   ),
-                ),
                 const SizedBox(height: 14),
                 GoldButton(
-                  label: 'ENTRAR',
-                  onPressed: () =>
-                      Navigator.pushReplacementNamed(context, '/home'),
+                  label: loading
+                      ? 'AGUARDE...'
+                      : (login ? 'ENTRAR' : 'CRIAR MINHA CONTA'),
+                  onPressed: loading ? null : _submit,
                 ),
                 const SizedBox(height: 16),
                 Center(
                   child: TextButton(
-                    onPressed: () => setState(() => login = false),
-                    child: const Text('Criar minha conta'),
+                    onPressed: loading
+                        ? null
+                        : () {
+                            _formKey.currentState?.reset();
+                            setState(() => login = !login);
+                          },
+                    child: Text(
+                      login ? 'Criar minha conta' : 'Já tenho uma conta  →  Entrar',
+                    ),
                   ),
                 ),
-              ] else ...[
-                GoldButton(
-                  label: 'CRIAR MINHA CONTA',
-                  onPressed: () => setState(() => login = true),
-                ),
-                const SizedBox(height: 16),
-                Center(
-                  child: TextButton(
-                    onPressed: () => setState(() => login = true),
-                    child: const Text('Já tenho uma conta  →  Entrar'),
-                  ),
-                ),
-                const SizedBox(height: 36),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(18),
-                  decoration: BoxDecoration(
-                    color: Seek7Colors.blueLight,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.bolt_rounded,
-                        color: Seek7Colors.gold,
-                        size: 28,
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'UMA CONTA. MUITAS POSSIBILIDADES.',
-                        style: TextStyle(
-                          color: Seek7Colors.navy,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: .6,
+                if (!login) ...[
+                  const SizedBox(height: 20),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(18),
+                    decoration: BoxDecoration(
+                      color: Seek7Colors.blueLight,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.bolt_rounded,
+                          color: Seek7Colors.gold,
+                          size: 28,
                         ),
-                      ),
-                      SizedBox(height: 7),
-                      Text(
-                        'Encontre oportunidades, ganhe recompensas ou divulgue o que quiser. Você escolhe como usar o SEEK7.',
-                        style: TextStyle(
-                          color: Seek7Colors.navy,
-                          fontSize: 13,
-                          height: 1.45,
-                          fontWeight: FontWeight.w600,
+                        SizedBox(height: 10),
+                        Text(
+                          'UMA CONTA. MUITAS POSSIBILIDADES.',
+                          style: TextStyle(
+                            color: Seek7Colors.navy,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: .6,
+                          ),
                         ),
-                      ),
-                    ],
+                        SizedBox(height: 7),
+                        Text(
+                          'Encontre oportunidades, ganhe recompensas ou divulgue o que quiser. Você escolhe como usar o SEEK7.',
+                          style: TextStyle(
+                            color: Seek7Colors.navy,
+                            fontSize: 13,
+                            height: 1.45,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _field(String label, IconData icon, {bool obscure = false}) {
-    return TextField(
+  Widget _field(
+    String label,
+    IconData icon, {
+    required TextEditingController controller,
+    required String? Function(String?) validator,
+    bool obscure = false,
+    TextInputType? keyboardType,
+    Widget? suffixIcon,
+  }) {
+    return TextFormField(
+      controller: controller,
       obscureText: obscure,
+      keyboardType: keyboardType,
+      validator: validator,
       decoration: InputDecoration(
         labelText: label,
         prefixIcon: Icon(icon, color: Seek7Colors.navy),
+        suffixIcon: suffixIcon,
         filled: true,
         fillColor: Seek7Colors.surface,
         border: OutlineInputBorder(
