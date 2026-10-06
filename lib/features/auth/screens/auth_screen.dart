@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/auth/seek7_auth_validation.dart';
 import '../../../core/theme/seek7_theme.dart';
@@ -150,9 +149,6 @@ class _AuthScreenState extends State<AuthScreen> {
                     textCapitalization: TextCapitalization.words,
                     autocorrect: false,
                     enableSuggestions: false,
-                    enableIMEPersonalizedLearning: false,
-                    smartDashesType: SmartDashesType.disabled,
-                    smartQuotesType: SmartQuotesType.disabled,
                     validator: Seek7AuthValidation.name,
                   ),
                   const SizedBox(height: 13),
@@ -300,12 +296,8 @@ class _AuthScreenState extends State<AuthScreen> {
     bool obscure = false,
     TextInputType? keyboardType,
     TextInputAction? textInputAction,
-    List<TextInputFormatter>? inputFormatters,
     bool autocorrect = false,
     bool enableSuggestions = false,
-    bool enableIMEPersonalizedLearning = true,
-    SmartDashesType? smartDashesType,
-    SmartQuotesType? smartQuotesType,
     TextCapitalization textCapitalization = TextCapitalization.none,
     Widget? suffixIcon,
   }) {
@@ -314,12 +306,8 @@ class _AuthScreenState extends State<AuthScreen> {
       obscureText: obscure,
       keyboardType: keyboardType,
       textInputAction: textInputAction,
-      inputFormatters: inputFormatters,
       autocorrect: autocorrect,
       enableSuggestions: enableSuggestions,
-      enableIMEPersonalizedLearning: enableIMEPersonalizedLearning,
-      smartDashesType: smartDashesType,
-      smartQuotesType: smartQuotesType,
       textCapitalization: textCapitalization,
       validator: validator,
       decoration: InputDecoration(
